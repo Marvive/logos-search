@@ -1,4 +1,7 @@
 {
+"scripts": {
+  "publish": "npx @raycast/api@latest publish"
+  },
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "logos-search",
   "title": "Logos Search",
