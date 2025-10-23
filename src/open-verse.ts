@@ -112,7 +112,7 @@ export default async function Command(props: LaunchProps<{ arguments: CommandArg
     await showToast({
       style: Toast.Style.Failure,
       title: "Input required",
-      message: "Type an alias and a reference, for example: vl John 3:16",
+      message: "Type an alias and a reference, for example: nasb John 3:16",
     });
     return;
   }

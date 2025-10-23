@@ -24,7 +24,7 @@
         {
           "name": "input",
           "type": "text",
-          "placeholder": "vl John 3:16"
+          "placeholder": "nasb John 3:16"
         }
       ],
       "preferences": [
@@ -40,7 +40,7 @@
           "name": "versionAliases",
           "type": "textfield",
           "title": "Version Aliases",
-          "placeholder": "vl=esv, nasb=nasb95",
+          "placeholder": "nasb=nasb95, nkjv=nkjv",
           "description": "JSON object or alias=version pairs for quick version shortcuts.",
           "required": false
         },

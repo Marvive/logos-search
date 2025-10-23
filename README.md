@@ -6,7 +6,7 @@ Raycast extension with two commands that open verses and resources in Logos Bibl
 
 ### Open Verse in Logos
 
-- Accepts input like `vl John 3:16` (alias + reference) or `John 3:16` (reference only).
+- Accepts input like `nasb John 3:16` (alias + reference) or `John 3:16` (reference only).
 - Resolves Bible version aliases defined in command preferences.
 - Builds a ref.ly deep link and opens it in Logos (optional clipboard copy for debugging).
 - Validates empty input and unknown aliases with clear toasts.
@@ -23,9 +23,8 @@ Raycast extension with two commands that open verses and resources in Logos Bibl
 ### Version Aliases (Open Verse command)
 
 - **Default Version** is required (for example `esv`).
-- **Version Aliases** accepts either JSON (`{"vl":"esv"}`) or `alias=version` lines:
+- **Version Aliases** accepts either JSON (`{"nasb":"nasb95"}`) or `alias=version` lines:
   ```text
-  vl=esv
   nasb=nasb95
   nkjv=nkjv
   ```

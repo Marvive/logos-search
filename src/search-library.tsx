@@ -59,7 +59,7 @@ const ABBREV_COLUMN_CANDIDATES = ["abbreviation", "abbrev", "shorttitle", "resou
 let sqlInstancePromise: Promise<SqlJsStatic> | undefined;
 
 export default function Command() {
-  const preferences = getPreferenceValues<Preferences>();
+  const preferences = useMemo(() => getPreferenceValues<Preferences>(), []);
   const [state, setState] = useState<State>({ resources: [], isLoading: true });
   const [searchText, setSearchText] = useState("");
   const [isIndexing, setIsIndexing] = useState(false);
