@@ -27,7 +27,7 @@ Raycast extension with two commands that open verses and resources in Logos Bibl
 - Suggested starters you can copy into the preference:
   ```json
   {
-    "niv": "niv",
+    "niv": "niv2011",
     "nasb": "nasb95",
     "msg": "message",
     "esv": "esv",
@@ -41,7 +41,7 @@ Raycast extension with two commands that open verses and resources in Logos Bibl
   ```
 - Prefer plain text? Paste the same list as a single comma-separated line:
   ```text
-  niv=niv, nasb=nasb95, msg=message, esv=esv, lsb=lsb, leb=leb, nlt=nlt, kjv=kjv, nkjv=nkjv, rsv=rsv
+  niv=niv2011, nasb=nasb95, msg=message, esv=esv, lsb=lsb, leb=leb, nlt=nlt, kjv=kjv, nkjv=nkjv, rsv=rsv
   ```
 - Unknown aliases surface a toast so you can adjust preferences quickly.
 
