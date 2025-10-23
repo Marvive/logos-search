@@ -23,10 +23,25 @@ Raycast extension with two commands that open verses and resources in Logos Bibl
 ### Version Aliases (Open Verse command)
 
 - **Default Version** is required (for example `esv`).
-- **Version Aliases** accepts either JSON (`{"nasb":"nasb95"}`) or `alias=version` lines:
+- **Version Aliases** accepts either JSON (`{"nasb":"nasb95"}`) or comma-separated `alias=version` pairs in the preference field.
+- Suggested starters you can copy into the preference:
+  ```json
+  {
+    "niv": "niv",
+    "nasb": "nasb95",
+    "msg": "message",
+    "esv": "esv",
+    "lsb": "lsb",
+    "leb": "leb",
+    "nlt": "nlt",
+    "kjv": "kjv",
+    "nkjv": "nkjv",
+    "rsv": "rsv"
+  }
+  ```
+- Prefer plain text? Paste the same list as a single comma-separated line:
   ```text
-  nasb=nasb95
-  nkjv=nkjv
+  niv=niv, nasb=nasb95, msg=message, esv=esv, lsb=lsb, leb=leb, nlt=nlt, kjv=kjv, nkjv=nkjv, rsv=rsv
   ```
 - Unknown aliases surface a toast so you can adjust preferences quickly.
 

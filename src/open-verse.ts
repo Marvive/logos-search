@@ -202,15 +202,18 @@ function parseVersionAliases(raw?: string): AliasMap {
 
   const lines = trimmed.split(/\r?\n/);
   for (const line of lines) {
-    const normalized = line.trim();
-    if (!normalized || normalized.startsWith("#")) {
-      continue;
-    }
-    const [aliasRaw, versionRaw] = normalized.split(/\s*=\s*/);
-    const alias = aliasRaw?.trim().toLowerCase();
-    const version = versionRaw?.trim();
-    if (alias && version) {
-      map[alias] = version;
+    const segments = line.split(",");
+    for (const segment of segments) {
+      const normalized = segment.trim();
+      if (!normalized || normalized.startsWith("#")) {
+        continue;
+      }
+      const [aliasRaw, versionRaw] = normalized.split(/\s*=\s*/);
+      const alias = aliasRaw?.trim().toLowerCase();
+      const version = versionRaw?.trim();
+      if (alias && version) {
+        map[alias] = version;
+      }
     }
   }
 
