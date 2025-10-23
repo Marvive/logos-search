@@ -18,7 +18,7 @@
       "name": "open-verse",
       "title": "Open Verse in Logos",
       "subtitle": "Open a Bible verse in Logos",
-      "description": "Open a Bible reference in Logos. Configure aliases (e.g. niv=niv, nasb=nasb95) in preferences to pick versions quickly. Version codes: niv, nasb95, message, esv, lsb, leb, nlt, kjv, nkjv, rsv. Enter aliases as JSON (e.g. {\"esv\":\"esv\"}) or comma-separated alias=version entries.",
+      "description": "Open a Bible reference in Logos. Configure aliases (e.g. niv=niv2011, nasb=nasb95) in preferences to pick versions quickly. Version codes: niv, nasb95, message, esv, lsb, leb, nlt, kjv, nkjv, rsv. Enter aliases as JSON (e.g. {\"esv\":\"esv\"}) or comma-separated alias=version entries.",
       "mode": "no-view",
       "arguments": [
         {
@@ -41,7 +41,7 @@
           "type": "textfield",
           "title": "Version Aliases",
           "placeholder": "alias=version",
-          "description": "Add aliases such as niv=niv, nasb=nasb95, msg=message, esv=esv, lsb=lsb, leb=leb, nlt=nlt, kjv=kjv, nkjv=nkjv, rsv=rsv. Accepts JSON or comma-separated alias=version pairs (e.g. esv=esv, nasb=nasb95).",
+          "description": "Add aliases such as niv=niv2011, nasb=nasb95, msg=message, esv=esv, lsb=lsb, leb=leb, nlt=nlt, kjv=kjv, nkjv=nkjv, rsv=rsv. Accepts JSON or comma-separated alias=version pairs (e.g. esv=esv, nasb=nasb95).",
           "required": false
         },
         {
