@@ -375,7 +375,8 @@ async function buildCoverMap(database: Database, coversDir: string): Promise<Map
 
   for (const row of records.values as (string | number | Uint8Array | null)[][]) {
     const rawRecordId = row[recordIdIndex];
-    const recordId = typeof rawRecordId === "number" ? rawRecordId : typeof rawRecordId === "string" ? Number(rawRecordId) : undefined;
+    const recordId =
+      typeof rawRecordId === "number" ? rawRecordId : typeof rawRecordId === "string" ? Number(rawRecordId) : undefined;
     if (!recordId || Number.isNaN(recordId)) {
       continue;
     }
@@ -385,12 +386,10 @@ async function buildCoverMap(database: Database, coversDir: string): Promise<Map
       const extension = detectImageExtension(blob);
       const filePath = path.join(coversDir, `${recordId}${extension}`);
       covers.set(recordId, { type: "file", path: filePath });
-      const writePromise = fs
-        .writeFile(filePath, Buffer.from(blob))
-        .catch((error) => {
-          console.error(`Failed to write cover for record ${recordId}`, error);
-          covers.delete(recordId);
-        }) as Promise<void>;
+      const writePromise = fs.writeFile(filePath, Buffer.from(blob)).catch((error) => {
+        console.error(`Failed to write cover for record ${recordId}`, error);
+        covers.delete(recordId);
+      }) as Promise<void>;
       pendingWrites.push(writePromise);
 
       if (pendingWrites.length >= COVER_WRITE_BATCH_SIZE) {
@@ -492,7 +491,11 @@ function findResourceTable(database: Database) {
   throw new Error("Could not find a resource table inside catalog.db");
 }
 
-function queryResources(database: Database, columns: ResourceTableInfo, covers: Map<number, ResourceCover>): ResourceRow[] {
+function queryResources(
+  database: Database,
+  columns: ResourceTableInfo,
+  covers: Map<number, ResourceCover>,
+): ResourceRow[] {
   const selectColumns = [
     `${quoteIdentifier(columns.idColumn)} AS id`,
     `${quoteIdentifier(columns.titleColumn)} AS title`,

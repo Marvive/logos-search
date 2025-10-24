@@ -134,7 +134,7 @@ export default function Command() {
   }, [dbInfo, searchText]);
 
   const openTopic = useCallback(async (reference: string, label: string) => {
-    const uri = encodeURI(`logos4:Factbook;ref=${reference}`);
+    const uri = buildFactbookUri(reference);
     try {
       await open(uri);
       await showHUD(`Opening ${label}`);
@@ -147,7 +147,7 @@ export default function Command() {
     }
   }, []);
 
-  const copyUri = useCallback(async (reference: string) => Clipboard.copy(`logos4:Factbook;ref=${reference}`), []);
+  const copyUri = useCallback(async (reference: string) => Clipboard.copy(buildFactbookUri(reference)), []);
 
   const listIsLoading = isResolving || isSearching;
   const hasResults = topics.length > 0;
@@ -286,8 +286,20 @@ async function resolveAutoComplete(preferences: Preferences): Promise<AutoComple
 }
 
 async function queryTopics(dbPath: string, rawQuery: string): Promise<TopicRow[]> {
-  const sanitized = escapeSql(rawQuery.trim());
-  const likeClause = `%${sanitized}%`;
+  const terms = getSearchTerms(rawQuery);
+  if (terms.length === 0) {
+    return [];
+  }
+  const likeClauses = terms.map((term) => `%${escapeSql(term)}%`);
+  const searchConditions = likeClauses
+    .map(
+      (clause) => `(
+    l.LabelText LIKE '${clause}' COLLATE NOCASE OR
+    t.Reference LIKE '${clause}' OR
+    (d.Description IS NOT NULL AND d.Description LIKE '${clause}' COLLATE NOCASE)
+  )`,
+    )
+    .join(" OR ");
 
   const sql = `
 WITH lang AS (
@@ -304,11 +316,7 @@ LEFT JOIN Labels l ON l.TermId = t.TermId AND l.LanguageId = lang.LanguageId AND
 LEFT JOIN Descriptions d ON d.TermId = t.TermId AND d.LanguageId = lang.LanguageId
 LEFT JOIN IconKinds k ON k.IconKindId = t.IconKindId
 WHERE t.Reference LIKE '${FACTBOOK_REFERENCE_PATTERN}'
-  AND (
-    l.LabelText LIKE '${likeClause}' COLLATE NOCASE OR
-    t.Reference LIKE '${likeClause}' OR
-    (d.Description IS NOT NULL AND d.Description LIKE '${likeClause}' COLLATE NOCASE)
-  )
+  AND (${searchConditions})
 ORDER BY l.LabelText COLLATE NOCASE
 LIMIT ${RESULT_LIMIT};
 `;
@@ -326,6 +334,81 @@ LIMIT ${RESULT_LIMIT};
 }
 
 type SqliteRow = Record<string, unknown>;
+
+function buildFactbookUri(reference: string): string {
+  const normalized = normalizeFactbookReference(reference);
+  if (!normalized) {
+    return "https://ref.ly/logos4/Factbook";
+  }
+  const idParam = encodeURIComponent(normalized);
+  return `https://ref.ly/logos4/Factbook?id=${idParam}&lens=all`;
+}
+
+function normalizeFactbookReference(reference: string): string {
+  const trimmed = reference.trim();
+  if (!trimmed) {
+    return "";
+  }
+
+  const candidate = extractReferenceCandidate(trimmed);
+  const decoded = decodeReference(candidate);
+  if (decoded.toLowerCase().startsWith("ref:")) {
+    return decoded;
+  }
+  return `ref:${decoded}`;
+}
+
+function extractReferenceCandidate(input: string): string {
+  const refMatch = input.match(/ref=([^;&]+)/i);
+  if (refMatch?.[1]) {
+    return refMatch[1];
+  }
+
+  const idMatch = input.match(/[?&]id=([^&]+)/i);
+  if (idMatch?.[1]) {
+    return idMatch[1];
+  }
+
+  return input;
+}
+
+function decodeReference(input: string): string {
+  try {
+    return decodeURIComponent(input);
+  } catch {
+    return input;
+  }
+}
+
+function getSearchTerms(rawQuery: string): string[] {
+  const trimmed = rawQuery.trim();
+  const seen = new Set<string>();
+  const terms: string[] = [];
+
+  const addTerm = (term: string) => {
+    const normalized = term.toLowerCase();
+    if (!normalized || seen.has(normalized)) {
+      return;
+    }
+    seen.add(normalized);
+    terms.push(term);
+  };
+
+  if (trimmed) {
+    addTerm(trimmed);
+    for (const piece of trimmed.split(/\s+/)) {
+      if (piece.length >= MIN_QUERY_LENGTH) {
+        addTerm(piece);
+      }
+    }
+  }
+
+  if (terms.length === 0 && trimmed) {
+    terms.push(trimmed);
+  }
+
+  return terms;
+}
 
 async function runSqliteQuery(dbPath: string, sql: string): Promise<SqliteRow[]> {
   try {
