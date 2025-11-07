@@ -3,7 +3,8 @@
   "name": "logos-launcher",
   "title": "Logos Launcher",
   "description": "Opens books, verses or resources in Logos Bible Software",
-  "icon": "./logos_resize.png",
+  "type": "module",
+  "icon": "logos_resize.png",
   "author": "michael_marvive",
   "platforms": [
     "macOS",

@@ -12,6 +12,7 @@ import {
   showHUD,
   showToast,
 } from "@raycast/api";
+import { showFailureToast } from "@raycast/utils";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Fuse from "fuse.js";
 import initSqlJs, { Database, SqlJsStatic } from "sql.js";
@@ -147,9 +148,7 @@ export default function Command() {
         toast.message = undefined;
       } catch (error) {
         const message = extractErrorMessage(error);
-        toast.style = Toast.Style.Failure;
-        toast.title = "Indexing failed";
-        toast.message = message;
+        showFailureToast("Indexing failed", message);
         setState({ resources: [], isLoading: false, error: message });
       } finally {
         setIsIndexing(false);
@@ -179,11 +178,7 @@ export default function Command() {
         }
       }
 
-      await showToast({
-        style: Toast.Style.Failure,
-        title: "Could not open Logos",
-        message: `${extractErrorMessage(lastError)} — Tried ${primaryFirst.join(", ")}`,
-      });
+      showFailureToast("Could not open Logos", `${extractErrorMessage(lastError)} — Tried ${primaryFirst.join(", ")}`);
     },
     [preferences.openScheme],
   );
@@ -386,7 +381,7 @@ async function buildCoverMap(database: Database, coversDir: string): Promise<Map
       const extension = detectImageExtension(blob);
       const filePath = path.join(coversDir, `${recordId}${extension}`);
       covers.set(recordId, { type: "file", path: filePath });
-      const writePromise = fs.writeFile(filePath, Buffer.from(blob)).catch((error) => {
+      const writePromise = writeCoverFile(filePath, blob).catch((error) => {
         console.error(`Failed to write cover for record ${recordId}`, error);
         covers.delete(recordId);
       }) as Promise<void>;
@@ -436,6 +431,23 @@ function parseRecordId(value: unknown): number | undefined {
     return Number.isFinite(parsed) ? parsed : undefined;
   }
   return undefined;
+}
+
+async function writeCoverFile(filePath: string, blob: Uint8Array) {
+  const buffer = Buffer.from(blob);
+
+  try {
+    await fs.writeFile(filePath, buffer);
+    return;
+  } catch (error) {
+    const nodeError = error as NodeJS.ErrnoException;
+    if (nodeError?.code !== "ENOENT") {
+      throw error;
+    }
+  }
+
+  await fs.mkdir(path.dirname(filePath), { recursive: true });
+  await fs.writeFile(filePath, buffer);
 }
 
 async function getSqlInstance(): Promise<SqlJsStatic> {

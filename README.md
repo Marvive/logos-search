@@ -17,6 +17,7 @@ Raycast extension with four commands that open verses, run searches, and browse 
 - Provides a Raycast list with fuzzy search, loading state, and quick actions to open or copy links.
 - Caches the parsed catalog to speed up future runs and exposes a Rebuild Index action.
 - Falls back gracefully when the database is missing or permissions block access.
+- Uses a configurable fuzzy match threshold that defaults to `0.3`, so you can rely on sensible results without touching preferences on first run.
 
 ### Logos All Search
 
@@ -61,6 +62,12 @@ Raycast extension with four commands that open verses, run searches, and browse 
 - Automatically locates the most recent `catalog.db` under `~/Library/Application Support/Logos4/Data/*/LibraryCatalog/`.
 - Provide a custom path in preferences to override auto-discovery (tilde expansion supported).
 - Use the Action Panel to rebuild the index after purchasing resources or to reveal the database in Finder.
+
+### Fuzzy Match Threshold (Search Library command)
+
+- Defaults to `0.3`, which balances recall and precision for most libraries.
+- Leave the preference blank to stick with `0.3`, then tweak it later from the command settings when you want stricter (closer to `0`) or looser (closer to `1`) matches.
+- The field is optional, so the command never blocks on first launch just to set a number.
 
 ### AutoComplete Database (Search Factbook command)
 
