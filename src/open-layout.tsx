@@ -50,10 +50,12 @@ export default function Command() {
 
     for (const uri of uris) {
       try {
+        console.info("[Layouts] Attempting to open layout", { guid: layout.guid, uri });
         await open(uri, LOGOS_BUNDLE_ID);
         await showHUD(`Loading ${layout.title}`);
         return;
       } catch (error) {
+        console.error("[Layouts] Failed to open layout URI", { uri, error });
         lastError = error;
       }
     }
