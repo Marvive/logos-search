@@ -1,0 +1,183 @@
+import { Action, ActionPanel, Icon, List, Toast, getPreferenceValues, open, showHUD, showToast } from "@raycast/api";
+import fs from "fs/promises";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { extractErrorMessage } from "./utils/errors";
+import { findLayoutsDatabase } from "./logos/installations";
+import { getSqlInstance } from "./utils/sql";
+
+type Preferences = {
+  documentsDbPath?: string;
+};
+
+type Layout = {
+  id: number;
+  title: string;
+  guid: string;
+  modified?: string;
+  uri: string;
+};
+
+type State = {
+  layouts: Layout[];
+  isLoading: boolean;
+  error?: string;
+  dbPath?: string;
+};
+
+export default function Command() {
+  const preferences = useMemo(() => getPreferenceValues<Preferences>(), []);
+  const [state, setState] = useState<State>({ layouts: [], isLoading: true });
+
+  const reload = useCallback(async () => {
+    setState((previous) => ({ ...previous, isLoading: true, error: undefined }));
+    try {
+      const result = await loadLayouts(preferences);
+      setState({ layouts: result.layouts, dbPath: result.dbPath, isLoading: false });
+    } catch (error) {
+      setState({ layouts: [], dbPath: undefined, isLoading: false, error: extractErrorMessage(error) });
+    }
+  }, [preferences]);
+
+  useEffect(() => {
+    reload();
+  }, [reload]);
+
+  const openLayout = useCallback(async (layout: Layout) => {
+    const uris = buildLayoutUris(layout);
+    let lastError: unknown;
+
+    for (const uri of uris) {
+      try {
+        await open(uri);
+        await showHUD(`Loading ${layout.title}`);
+        return;
+      } catch (error) {
+        lastError = error;
+      }
+    }
+
+    await showToast({
+      style: Toast.Style.Failure,
+      title: "Could not open Logos",
+      message: `${extractErrorMessage(lastError)} — Tried ${uris.join(", ")}`,
+    });
+  }, []);
+
+  const emptyDescription = state.error
+    ? state.error
+    : "No layouts found. Save one in Logos or point Raycast at layouts.db.";
+
+  const renderRevealAction = state.dbPath
+    ? () => <Action.Open title="Reveal Layouts DB" icon={Icon.Eye} target={state.dbPath} application="Finder" />
+    : undefined;
+
+  return (
+    <List isLoading={state.isLoading} searchBarPlaceholder="Type to filter layouts">
+      {state.layouts.length === 0 && !state.isLoading ? (
+        <List.EmptyView
+          icon={state.error ? Icon.ExclamationMark : Icon.Desktop}
+          title={state.error ? "Cannot load layouts" : "No layouts saved"}
+          description={emptyDescription}
+          actions={
+            <ActionPanel>
+              <Action title="Reload Layouts" icon={Icon.ArrowClockwise} onAction={reload} />
+              {renderRevealAction ? renderRevealAction() : undefined}
+            </ActionPanel>
+          }
+        />
+      ) : (
+        state.layouts.map((layout) => (
+          <List.Item
+            key={layout.uri}
+            title={layout.title}
+            subtitle={layout.modified ? new Date(layout.modified).toLocaleString() : undefined}
+            icon={Icon.Desktop}
+            actions={
+              <ActionPanel>
+                <Action title="Open Layout" icon={Icon.AppWindow} onAction={() => openLayout(layout)} />
+                <Action.CopyToClipboard title="Copy Layout URI" content={layout.uri} />
+                <Action title="Reload Layouts" icon={Icon.ArrowClockwise} onAction={reload} />
+                {renderRevealAction ? renderRevealAction() : undefined}
+              </ActionPanel>
+            }
+          />
+        ))
+      )}
+    </List>
+  );
+}
+
+async function loadLayouts(preferences: Preferences) {
+  const dbPath = await findLayoutsDatabase(preferences.documentsDbPath);
+  const SQL = await getSqlInstance();
+  const file = await fs.readFile(dbPath);
+  const database = new SQL.Database(new Uint8Array(file));
+
+  try {
+    const result = database.exec(
+      "SELECT LayoutId AS id, Title AS title, hex(SyncId) AS guidHex, coalesce(SyncDate, CreatedDate) AS modified FROM Layouts WHERE IsDeleted = 0 AND Title IS NOT NULL AND length(Title) > 0",
+    );
+    if (!result.length) {
+      return { layouts: [], dbPath };
+    }
+
+    const rows = result[0];
+    const layouts: Layout[] = [];
+    for (const row of rows.values) {
+      const record = Object.fromEntries(rows.columns.map((column, index) => [column, row[index]]));
+      const guidHex = typeof record.guidHex === "string" ? record.guidHex.toLowerCase() : undefined;
+      const guid = guidHex ? formatGuid(guidHex) : undefined;
+      const title = typeof record.title === "string" ? record.title.trim() : undefined;
+      if (!title || !guid) {
+        continue;
+      }
+      layouts.push({
+        id: Number(record.id),
+        title,
+        guid,
+        modified: record.modified ? String(record.modified) : undefined,
+        uri: `logos4:Layout;LayoutGuid=${guid}`,
+      });
+    }
+
+    layouts.sort((a, b) => a.title.localeCompare(b.title));
+    return { layouts, dbPath };
+  } finally {
+    database.close();
+  }
+}
+
+function buildLayoutUris(layout: Layout) {
+  const encodedTitle = encodeURIComponent(layout.title);
+  return [
+    `logos4:Layout;LayoutGuid=${layout.guid}`,
+    `logos:Layout;LayoutGuid=${layout.guid}`,
+    `logos4:Layouts;name=${encodedTitle}`,
+    `logos:Layouts;name=${encodedTitle}`,
+  ];
+}
+
+function formatGuid(hex: string) {
+  if (hex.length !== 32) {
+    return hex;
+  }
+  const bytes = hex.match(/../g);
+  if (!bytes) {
+    return hex;
+  }
+
+  const segment = (start: number, length: number, reverse: boolean) => {
+    const slice = bytes.slice(start, start + length);
+    if (reverse) {
+      slice.reverse();
+    }
+    return slice.join("");
+  };
+
+  const part1 = segment(0, 4, true);
+  const part2 = segment(4, 2, true);
+  const part3 = segment(6, 2, true);
+  const part4 = segment(8, 2, false);
+  const part5 = segment(10, 6, false);
+  return `${part1}-${part2}-${part3}-${part4}-${part5}`.toLowerCase();
+}

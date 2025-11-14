@@ -30,6 +30,18 @@ Raycast extension with four commands that open verses, run searches, and browse 
 - Returns the official topic label, category icon, and raw Factbook URI so you always know the exact identifier Logos expects.
 - Opens the highlighted topic in Factbook or copies the `logos4:Factbook;ref=…` URI for reuse.
 
+### Reading Plans
+
+- Lists the reading plans stored in each account's `Documents/ReadingPlan/ReadingPlan.db` so you can reach today's assignment with a single press of <kbd>Return</kbd>.
+- Opens the plan's Logos URI directly, which jumps to the assigned passage inside the app.
+- Provides a reload action plus a quick way to reveal the underlying `ReadingPlan.db` file for troubleshooting.
+
+### Open Logos Layout
+
+- Shows your saved layouts (from `LayoutManager/layouts.db`) and lets you filter them instantly as you type.
+- Launches the selected layout right away through its stored Logos URI.
+- Use the built-in action panel to copy the URI, reload the list, or reveal `layouts.db`.
+
 ## Configuration
 
 ### Version Aliases (Open Verse command)
@@ -75,6 +87,12 @@ Raycast extension with four commands that open verses, run searches, and browse 
 - Provide a custom path in preferences if your Logos data lives elsewhere (tilde expansion supported).
 - Results are fetched live (type ≥2 characters) so updates in Logos become available instantly after reloading the database.
 - Uses macOS' built-in `sqlite3` tool under the hood, so the command won't run until Command Line Tools are installed.
+
+### Documents Database (Reading Plans & Layouts)
+
+- Automatically scans `~/Library/Application Support/Logos*/Documents/*/` (and Verbum variants) for `Documents/ReadingPlan/ReadingPlan.db` and `LayoutManager/layouts.db`, then loads the freshest file.
+- Override the path in each command's preferences with either the database file itself or any folder that contains it (tilde expansion supported).
+- Both commands have reload + reveal actions so you can refresh the list after creating or renaming items in Logos.
 
 ### Open Schemes
 
