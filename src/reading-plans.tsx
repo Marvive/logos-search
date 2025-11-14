@@ -144,16 +144,36 @@ async function loadReadingPlans(preferences: Preferences) {
 
 function buildReadingPlanUris(plan: Plan) {
   const encodedTitle = encodeURIComponent(plan.title);
+  const rawGuid = extractPlanGuid(plan.documentId);
+  const formattedGuid = hyphenateGuid(rawGuid);
   const encodedDocumentId = encodeURIComponent(plan.documentId);
+  const encodedRawGuid = encodeURIComponent(rawGuid);
+
   return [
+    `logos4:ReadingPlan;documentId=${rawGuid}`,
+    `logos4:ReadingPlan;documentId=${formattedGuid}`,
+    `logos4:ReadingPlan;name=${encodedTitle}`,
+    `logos4:ReadingPlan;name=${plan.title}`,
     `logos4:Document;id=${plan.documentId}`,
     `logos4:Document;id=${encodedDocumentId}`,
-    `logos4:ReadingPlan;name=${encodedTitle}`,
-    `logos4:ReadingPlan;documentId=${encodedDocumentId}`,
-    `logos4:DocumentManager;name=ReadingPlan;documentId=${encodedDocumentId}`,
-    `logosres:${plan.documentId}`,
-    `logos4-command://readingplan/open?documentId=${encodedDocumentId}`,
-    `logos4:ReadingPlan;name=${plan.title}`,
+    `logos4:Document;id=Document:ReadingPlan:${rawGuid}`,
+    `logos4:Document;id=Document:ReadingPlan:${formattedGuid}`,
+    `logos4:DocumentManager;name=ReadingPlan;documentId=${rawGuid}`,
+    `logos4:DocumentManager;name=ReadingPlan;documentId=${encodedRawGuid}`,
+    `logos4-command://readingplan/open?documentId=${rawGuid}`,
+    `logos4-command://readingplan/open?documentId=${encodedRawGuid}`,
   ];
+}
+
+function extractPlanGuid(documentId: string) {
+  const parts = documentId.split(":");
+  return parts[parts.length - 1];
+}
+
+function hyphenateGuid(hex: string) {
+  if (hex.length !== 32) {
+    return hex;
+  }
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
 }
 const LOGOS_BUNDLE_ID = "com.logos.desktop.logos";

@@ -167,15 +167,26 @@ async function loadLayouts(preferences: Preferences) {
 
 function buildLayoutUris(layout: Layout) {
   const encodedTitle = encodeURIComponent(layout.title);
+  const hyphenGuid = hyphenateGuid(layout.guid);
   return [
     `logos4:Layout;LayoutGuid=${layout.guid}`,
+    `logos4:Layout;LayoutGuid=${hyphenGuid}`,
     `logos4:Layouts;layoutId=${layout.guid}`,
+    `logos4:Layouts;layoutId=${hyphenGuid}`,
     `logos4:Layouts;name=${encodedTitle}`,
     `logos4:Layout;Name=${encodedTitle}`,
     `logos4:LayoutManager;layoutGuid=${layout.guid}`,
-    `logosres:Layout:${layout.guid}`,
+    `logos4:LayoutManager;layoutGuid=${hyphenGuid}`,
     `logos4-command://layout/open?layoutGuid=${layout.guid}`,
+    `logos4-command://layout/open?layoutGuid=${hyphenGuid}`,
   ];
+}
+
+function hyphenateGuid(hex: string) {
+  if (hex.length !== 32) {
+    return hex;
+  }
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
 }
 
 function layoutTimestamp(layout: Layout) {
