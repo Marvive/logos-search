@@ -12,9 +12,11 @@ type Preferences = {
 type Layout = {
   id: number;
   title: string;
+  displayTitle: string;
   guid: string;
   modified?: string;
   uri: string;
+  isAuto: boolean;
 };
 
 type State = {
@@ -89,7 +91,7 @@ export default function Command() {
         state.layouts.map((layout) => (
           <List.Item
             key={layout.uri}
-            title={layout.title}
+            title={layout.displayTitle}
             subtitle={layout.modified ? new Date(layout.modified).toLocaleString() : undefined}
             icon={Icon.Desktop}
             actions={
@@ -122,26 +124,41 @@ async function loadLayouts(preferences: Preferences) {
     }
 
     const rows = result[0];
-    const layouts: Layout[] = [];
+    const deduped = new Map<string, Layout>();
     for (const row of rows.values) {
       const record = Object.fromEntries(rows.columns.map((column, index) => [column, row[index]]));
       const guidHex = typeof record.guidHex === "string" ? record.guidHex.toLowerCase() : undefined;
       const guid = guidHex ? formatGuid(guidHex) : undefined;
-      const title = typeof record.title === "string" ? record.title.trim() : undefined;
-      if (!title || !guid) {
+      const rawTitle = typeof record.title === "string" ? record.title.trim() : undefined;
+      if (!rawTitle || !guid) {
         continue;
       }
-      layouts.push({
+
+      const isAuto = rawTitle.toLowerCase() === "application closed";
+      const layout: Layout = {
         id: Number(record.id),
-        title,
+        title: rawTitle,
+        displayTitle: isAuto ? "Most Recent Layout" : rawTitle,
         guid,
         modified: record.modified ? String(record.modified) : undefined,
         uri: `logos4:Layout;LayoutGuid=${guid}`,
-      });
+        isAuto,
+      };
+
+      const existing = deduped.get(guid);
+      if (!existing || layoutIsNewer(layout, existing)) {
+        deduped.set(guid, layout);
+      }
     }
 
-    layouts.sort((a, b) => a.title.localeCompare(b.title));
-    return { layouts, dbPath };
+    const dedupedLayouts = Array.from(deduped.values());
+    const autos = dedupedLayouts.filter((layout) => layout.isAuto);
+    const saved = dedupedLayouts.filter((layout) => !layout.isAuto);
+    saved.sort((a, b) => a.title.localeCompare(b.title));
+
+    const mostRecentAuto = autos.sort((a, b) => layoutTimestamp(b) - layoutTimestamp(a))[0];
+    const finalLayouts = mostRecentAuto ? [mostRecentAuto, ...saved] : saved;
+    return { layouts: finalLayouts, dbPath };
   } finally {
     database.close();
   }
@@ -180,4 +197,18 @@ function formatGuid(hex: string) {
   const part4 = segment(8, 2, false);
   const part5 = segment(10, 6, false);
   return `${part1}-${part2}-${part3}-${part4}-${part5}`.toLowerCase();
+}
+
+function layoutTimestamp(layout: Layout) {
+  if (layout.modified) {
+    const parsed = Date.parse(layout.modified);
+    if (!Number.isNaN(parsed)) {
+      return parsed;
+    }
+  }
+  return layout.id;
+}
+
+function layoutIsNewer(candidate: Layout, current: Layout) {
+  return layoutTimestamp(candidate) > layoutTimestamp(current);
 }
