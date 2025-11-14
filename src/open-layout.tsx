@@ -169,9 +169,12 @@ function buildLayoutUris(layout: Layout) {
   const encodedTitle = encodeURIComponent(layout.title);
   return [
     `logos4:Layout;LayoutGuid=${layout.guid}`,
-    `logos:Layout;LayoutGuid=${layout.guid}`,
+    `logos4:Layouts;layoutId=${layout.guid}`,
     `logos4:Layouts;name=${encodedTitle}`,
-    `logos:Layouts;name=${encodedTitle}`,
+    `logos4:Layout;Name=${encodedTitle}`,
+    `logos4:LayoutManager;layoutGuid=${layout.guid}`,
+    `logosres:Layout:${layout.guid}`,
+    `logos4-command://layout/open?layoutGuid=${layout.guid}`,
   ];
 }
 

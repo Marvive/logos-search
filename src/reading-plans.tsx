@@ -144,11 +144,16 @@ async function loadReadingPlans(preferences: Preferences) {
 
 function buildReadingPlanUris(plan: Plan) {
   const encodedTitle = encodeURIComponent(plan.title);
+  const encodedDocumentId = encodeURIComponent(plan.documentId);
   return [
     `logos4:Document;id=${plan.documentId}`,
-    `logos:Document;id=${plan.documentId}`,
+    `logos4:Document;id=${encodedDocumentId}`,
     `logos4:ReadingPlan;name=${encodedTitle}`,
-    `logos:ReadingPlan;name=${encodedTitle}`,
+    `logos4:ReadingPlan;documentId=${encodedDocumentId}`,
+    `logos4:DocumentManager;name=ReadingPlan;documentId=${encodedDocumentId}`,
+    `logosres:${plan.documentId}`,
+    `logos4-command://readingplan/open?documentId=${encodedDocumentId}`,
+    `logos4:ReadingPlan;name=${plan.title}`,
   ];
 }
 const LOGOS_BUNDLE_ID = "com.logos.desktop.logos";
