@@ -127,8 +127,7 @@ async function loadLayouts(preferences: Preferences) {
     const deduped = new Map<string, Layout>();
     for (const row of rows.values) {
       const record = Object.fromEntries(rows.columns.map((column, index) => [column, row[index]]));
-      const guidHex = typeof record.guidHex === "string" ? record.guidHex.toLowerCase() : undefined;
-      const guid = guidHex ? formatGuid(guidHex) : undefined;
+      const guid = typeof record.guidHex === "string" ? record.guidHex.toLowerCase() : undefined;
       const rawTitle = typeof record.title === "string" ? record.title.trim() : undefined;
       if (!rawTitle || !guid) {
         continue;
@@ -172,31 +171,6 @@ function buildLayoutUris(layout: Layout) {
     `logos4:Layouts;name=${encodedTitle}`,
     `logos:Layouts;name=${encodedTitle}`,
   ];
-}
-
-function formatGuid(hex: string) {
-  if (hex.length !== 32) {
-    return hex;
-  }
-  const bytes = hex.match(/../g);
-  if (!bytes) {
-    return hex;
-  }
-
-  const segment = (start: number, length: number, reverse: boolean) => {
-    const slice = bytes.slice(start, start + length);
-    if (reverse) {
-      slice.reverse();
-    }
-    return slice.join("");
-  };
-
-  const part1 = segment(0, 4, true);
-  const part2 = segment(4, 2, true);
-  const part3 = segment(6, 2, true);
-  const part4 = segment(8, 2, false);
-  const part5 = segment(10, 6, false);
-  return `${part1}-${part2}-${part3}-${part4}-${part5}`.toLowerCase();
 }
 
 function layoutTimestamp(layout: Layout) {

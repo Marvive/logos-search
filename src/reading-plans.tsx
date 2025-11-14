@@ -130,7 +130,7 @@ async function loadReadingPlans(preferences: Preferences) {
         documentId,
         title,
         modified,
-        uri: `logos4:Document;id=${encodeURIComponent(documentId)}`,
+        uri: `logos4:Document;id=${documentId}`,
       };
     });
     plans.sort((a, b) => a.title.localeCompare(b.title));
@@ -141,11 +141,10 @@ async function loadReadingPlans(preferences: Preferences) {
 }
 
 function buildReadingPlanUris(plan: Plan) {
-  const encodedId = encodeURIComponent(plan.documentId);
   const encodedTitle = encodeURIComponent(plan.title);
   return [
-    `logos4:Document;id=${encodedId}`,
-    `logos:Document;id=${encodedId}`,
+    `logos4:Document;id=${plan.documentId}`,
+    `logos:Document;id=${plan.documentId}`,
     `logos4:ReadingPlan;name=${encodedTitle}`,
     `logos:ReadingPlan;name=${encodedTitle}`,
   ];
