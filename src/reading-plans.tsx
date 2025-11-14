@@ -47,7 +47,7 @@ export default function Command() {
 
     for (const uri of uris) {
       try {
-        await open(uri);
+        await open(uri, LOGOS_BUNDLE_ID);
         await showHUD(`Opening ${plan.title}`);
         return;
       } catch (error) {
@@ -149,3 +149,4 @@ function buildReadingPlanUris(plan: Plan) {
     `logos:ReadingPlan;name=${encodedTitle}`,
   ];
 }
+const LOGOS_BUNDLE_ID = "com.logos.desktop.logos";

@@ -50,7 +50,7 @@ export default function Command() {
 
     for (const uri of uris) {
       try {
-        await open(uri);
+        await open(uri, LOGOS_BUNDLE_ID);
         await showHUD(`Loading ${layout.title}`);
         return;
       } catch (error) {
@@ -186,3 +186,4 @@ function layoutTimestamp(layout: Layout) {
 function layoutIsNewer(candidate: Layout, current: Layout) {
   return layoutTimestamp(candidate) > layoutTimestamp(current);
 }
+const LOGOS_BUNDLE_ID = "com.logos.desktop.logos";
