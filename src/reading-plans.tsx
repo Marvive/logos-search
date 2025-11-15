@@ -47,13 +47,11 @@ export default function Command() {
 
     for (const uri of uris) {
       try {
-        console.info("[ReadingPlans] Attempting to open plan", { documentId: plan.documentId, uri });
         const isHttp = uri.startsWith("http://") || uri.startsWith("https://");
         await open(uri, isHttp ? undefined : LOGOS_BUNDLE_ID);
         await showHUD(`Opening ${plan.title}`);
         return;
       } catch (error) {
-        console.error("[ReadingPlans] Failed to open plan URI", { uri, error });
         lastError = error;
       }
     }
