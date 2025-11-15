@@ -50,7 +50,7 @@ export default function Command() {
 
     for (const uri of uris) {
       try {
-        console.info("[Layouts] Attempting to open layout", { guid: layout.guid, uri });
+        console.info("[Layouts] Attempting to open layout", { id: layout.id, guid: layout.guid, uri });
         const isHttp = uri.startsWith("http://") || uri.startsWith("https://");
         await open(uri, isHttp ? undefined : LOGOS_BUNDLE_ID);
         await showHUD(`Loading ${layout.title}`);
@@ -170,9 +170,16 @@ function buildLayoutUris(layout: Layout) {
   const encodedTitle = encodeURIComponent(layout.title);
   const refLyTitle = encodeForRefLy(layout.title);
   const hyphenGuid = hyphenateGuid(layout.guid);
+  const layoutId = String(layout.id);
   return [
+    `https://ref.ly/logos4/Layout?layoutId=${layoutId}`,
+    `https://ref.ly/logos4/Layout?layoutId=${layoutId}&title=${refLyTitle}`,
+    `https://ref.ly/logos4/Layout?layoutGuid=${hyphenGuid}`,
     `https://ref.ly/logos4/Layout?title=${refLyTitle}`,
-    `https://ref.ly/logos4/Layout?title=${refLyTitle}&layoutId=${hyphenGuid}`,
+    `https://ref.ly/logos4/Layout?title=${refLyTitle}&layoutGuid=${hyphenGuid}`,
+    `logos4:Layout;layoutId=${layoutId}`,
+    `logos4:Layouts;layoutId=${layoutId}`,
+    `logos4:Layout;LayoutId=${layoutId}`,
     `logos4:Layout;LayoutGuid=${layout.guid}`,
     `logos4:Layout;LayoutGuid=${hyphenGuid}`,
     `logos4:Layouts;layoutId=${layout.guid}`,
