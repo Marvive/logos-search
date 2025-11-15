@@ -51,7 +51,8 @@ export default function Command() {
     for (const uri of uris) {
       try {
         console.info("[Layouts] Attempting to open layout", { guid: layout.guid, uri });
-        await open(uri, LOGOS_BUNDLE_ID);
+        const isHttp = uri.startsWith("http://") || uri.startsWith("https://");
+        await open(uri, isHttp ? undefined : LOGOS_BUNDLE_ID);
         await showHUD(`Loading ${layout.title}`);
         return;
       } catch (error) {
@@ -167,8 +168,11 @@ async function loadLayouts(preferences: Preferences) {
 
 function buildLayoutUris(layout: Layout) {
   const encodedTitle = encodeURIComponent(layout.title);
+  const refLyTitle = encodeForRefLy(layout.title);
   const hyphenGuid = hyphenateGuid(layout.guid);
   return [
+    `https://ref.ly/logos4/Layout?title=${refLyTitle}`,
+    `https://ref.ly/logos4/Layout?title=${refLyTitle}&layoutId=${hyphenGuid}`,
     `logos4:Layout;LayoutGuid=${layout.guid}`,
     `logos4:Layout;LayoutGuid=${hyphenGuid}`,
     `logos4:Layouts;layoutId=${layout.guid}`,
@@ -187,6 +191,10 @@ function hyphenateGuid(hex: string) {
     return hex;
   }
   return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+}
+
+function encodeForRefLy(value: string) {
+  return encodeURIComponent(value).replace(/%20/g, "+");
 }
 
 function layoutTimestamp(layout: Layout) {
