@@ -48,7 +48,8 @@ export default function Command() {
     for (const uri of uris) {
       try {
         console.info("[ReadingPlans] Attempting to open plan", { documentId: plan.documentId, uri });
-        await open(uri, LOGOS_BUNDLE_ID);
+        const isHttp = uri.startsWith("http://") || uri.startsWith("https://");
+        await open(uri, isHttp ? undefined : LOGOS_BUNDLE_ID);
         await showHUD(`Opening ${plan.title}`);
         return;
       } catch (error) {
@@ -143,16 +144,17 @@ async function loadReadingPlans(preferences: Preferences) {
 }
 
 function buildReadingPlanUris(plan: Plan) {
-  const encodedTitle = encodeURIComponent(plan.title);
   const rawGuid = extractPlanGuid(plan.documentId);
   const formattedGuid = hyphenateGuid(rawGuid);
   const encodedDocumentId = encodeURIComponent(plan.documentId);
   const encodedRawGuid = encodeURIComponent(rawGuid);
+  const refLyTitle = encodeForRefLy(plan.title);
 
   return [
+    `https://ref.ly/logos4/ReadingPlan?title=${refLyTitle}`,
+    `https://ref.ly/logos4/ReadingPlan?title=${refLyTitle}&documentId=${encodedRawGuid}`,
     `logos4:ReadingPlan;documentId=${rawGuid}`,
     `logos4:ReadingPlan;documentId=${formattedGuid}`,
-    `logos4:ReadingPlan;name=${encodedTitle}`,
     `logos4:ReadingPlan;name=${plan.title}`,
     `logos4:Document;id=${plan.documentId}`,
     `logos4:Document;id=${encodedDocumentId}`,
@@ -175,5 +177,9 @@ function hyphenateGuid(hex: string) {
     return hex;
   }
   return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+}
+
+function encodeForRefLy(value: string) {
+  return encodeURIComponent(value).replace(/%20/g, "+");
 }
 const LOGOS_BUNDLE_ID = "com.logos.desktop.logos";
