@@ -132,6 +132,23 @@
       ]
     },
     {
+      "name": "word-study",
+      "title": "Bible Word Study",
+      "subtitle": "Open Bible Word Study",
+      "description": "Launches the Bible Word Study tool in Logos via ref.ly.",
+      "mode": "view",
+      "preferences": [
+        {
+          "name": "autocompletePath",
+          "type": "textfield",
+          "title": "AutoComplete DB Path Override",
+          "placeholder": "~/Library/Application Support/Logos4/Data/.../AutoComplete/AutoComplete.db",
+          "description": "Optional path to AutoComplete.db. Leave empty for auto-discovery.",
+          "required": false
+        }
+      ]
+    },
+    {
       "name": "search-factbook",
       "title": "Search Factbook",
       "subtitle": "Open a topic in Logos Factbook",

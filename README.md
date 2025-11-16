@@ -1,6 +1,6 @@
 # Logos Search
 
-Raycast extension with four commands that open verses, run searches, and browse resources in Logos Bible Software.
+Raycast extension with commands that open verses, run searches, and browse resources in Logos Bible Software.
 
 ## Commands
 
@@ -23,6 +23,12 @@ Raycast extension with four commands that open verses, run searches, and browse 
 
 - Opens the Logos All Search UI via `https://ref.ly/logos4/Search` with `kind=AllSearch` and `syntax=v2`.
 - Accepts any text query and launches the search directly in Logos.
+
+### Bible Word Study
+
+- Streams suggestions straight from Logos’ `AutoComplete.db`, so typing a couple of letters surfaces the same lemmas, transliterations, and English senses you see inside Logos.
+- Selecting a row fires Logos’ `bws …` command with the canonical reference (plus multiple `logos4:` and `ref.ly` fallbacks) to reliably launch the Bible Word Study guide.
+- Includes quick actions to copy the command, the underlying word sense identifier, or reveal the AutoComplete database when you need to troubleshoot.
 
 ### Search Factbook
 
@@ -81,12 +87,12 @@ Raycast extension with four commands that open verses, run searches, and browse 
 - Leave the preference blank to stick with `0.3`, then tweak it later from the command settings when you want stricter (closer to `0`) or looser (closer to `1`) matches.
 - The field is optional, so the command never blocks on first launch just to set a number.
 
-### AutoComplete Database (Search Factbook command)
+### AutoComplete Database (Search Factbook & Bible Word Study commands)
 
-- Auto-detects the latest `AutoComplete.db` under `~/Library/Application Support/Logos4/Data/*/AutoComplete/`.
-- Provide a custom path in preferences if your Logos data lives elsewhere (tilde expansion supported).
+- Auto-detects the latest `AutoComplete.db` under `~/Library/Application Support/Logos*/Data/*/AutoComplete/`.
+- Provide a custom path in each command's preferences if your Logos data lives elsewhere (tilde expansion supported).
 - Results are fetched live (type ≥2 characters) so updates in Logos become available instantly after reloading the database.
-- Uses macOS' built-in `sqlite3` tool under the hood, so the command won't run until Command Line Tools are installed.
+- Uses macOS' built-in `sqlite3` tool under the hood, so the commands won't run until Command Line Tools are installed.
 
 ### Documents Database (Reading Plans & Layouts)
 
