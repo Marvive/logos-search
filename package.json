@@ -79,7 +79,6 @@
       "subtitle": "Find and open a Logos resource",
       "description": "Search your Logos library by title or author and open a resource",
       "mode": "view",
-      "enabled": false,
       "preferences": [
         {
           "name": "catalogPath",
@@ -165,24 +164,6 @@
           "required": false
         }
       ]
-    },
-    {
-      "name": "open-layout",
-      "title": "Open Logos Layout",
-      "subtitle": "Load a saved layout",
-      "description": "Filter saved layouts and load one instantly in Logos.",
-      "mode": "view",
-      "preferences": [
-        {
-          "name": "documentsDbPath",
-          "type": "textfield",
-          "title": "Documents DB Path Override",
-          "placeholder": "~/Library/Application Support/Logos4/Documents/.../LayoutManager/layouts.db",
-          "description": "Optional path to layouts.db (or its parent folder). Leave empty for auto-discovery.",
-          "required": false
-        }
-      ],
-      "disabled": true
     }
   ],
   "dependencies": {
