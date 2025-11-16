@@ -79,6 +79,7 @@
       "subtitle": "Find and open a Logos resource",
       "description": "Search your Logos library by title or author and open a resource",
       "mode": "view",
+      "enabled": false,
       "preferences": [
         {
           "name": "catalogPath",
@@ -180,7 +181,8 @@
           "description": "Optional path to layouts.db (or its parent folder). Leave empty for auto-discovery.",
           "required": false
         }
-      ]
+      ],
+      "disabled": true
     }
   ],
   "dependencies": {
