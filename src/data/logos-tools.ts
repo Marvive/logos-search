@@ -354,7 +354,10 @@ export const LOGOS_TOOL_GROUPS: LogosToolGroup[] = [
         keywords: ["events", "timeline", "relationships"],
         interactiveIds: ["EventNavigator"],
         interactiveSlugs: ["event-navigator", "biblical-event-navigator", "eventnavigator"],
-        uriHints: ["https://ref.ly/logosres/interactive:biblical-event-navigator", "logosres:interactive:biblical-event-navigator"],
+        uriHints: [
+          "https://ref.ly/logosres/interactive:biblical-event-navigator",
+          "logosres:interactive:biblical-event-navigator",
+        ],
         commandPhrases: ["Biblical Event Navigator", "Event Navigator"],
       },
       {
@@ -406,7 +409,10 @@ export const LOGOS_TOOL_GROUPS: LogosToolGroup[] = [
         keywords: ["intertextuality", "quotations", "new testament"],
         interactiveIds: ["NTUseOfOT"],
         interactiveSlugs: ["nt-use-of-ot", "ntuseofot", "nt-use-of-the-old-testament"],
-        uriHints: ["https://ref.ly/logosres/interactive:ntuseofot?pos=index.html", "logosres:interactive:ntuseofot?pos=index.html"],
+        uriHints: [
+          "https://ref.ly/logosres/interactive:ntuseofot?pos=index.html",
+          "logosres:interactive:ntuseofot?pos=index.html",
+        ],
         commandPhrases: ["NT Use of OT"],
       },
       {
@@ -489,10 +495,7 @@ export const LOGOS_TOOL_GROUPS: LogosToolGroup[] = [
         keywords: ["canon", "comparison", "traditions"],
         interactiveIds: ["CanonComparison"],
         interactiveSlugs: ["canon-comparison"],
-        uriHints: [
-          "https://ref.ly/logosres/interactive:canon-comparison",
-          "logosres:interactive:canon-comparison",
-        ],
+        uriHints: ["https://ref.ly/logosres/interactive:canon-comparison", "logosres:interactive:canon-comparison"],
         commandPhrases: ["Canon Comparison"],
       },
       {
