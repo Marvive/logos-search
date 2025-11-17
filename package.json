@@ -207,6 +207,13 @@
           "required": false
         }
       ]
+    },
+    {
+      "name": "tools-launcher",
+      "title": "Logos Tools Launcher",
+      "subtitle": "Search Logos tools & interactives",
+      "description": "Browse Atlas, Text Comparison, Sermon Builder, Copy Bible Verses, and dozens of interactives with autocomplete, then open them in Logos.",
+      "mode": "view"
     }
   ],
   "dependencies": {

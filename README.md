@@ -55,6 +55,12 @@ Raycast extension with commands that open verses, run searches, and browse resou
 - Launches the selected layout right away through its stored Logos URI.
 - Use the built-in action panel to copy the URI, reload the list, or reveal `layouts.db`.
 
+### Logos Tools Launcher
+
+- Surfaces a curated catalog of Logos tools, builders, and interactives (Atlas, Text Comparison, Sermon Builder, Copy Bible Verses, Advanced Timeline, Psalms Explorer, etc.) with instant filtering.
+- Includes synonyms, command phrases, and interactive IDs so Raycast's autocomplete matches whatever you remember typing in Logos' command box.
+- Opening a tool cycles through ref.ly, `logos4:` and `logos4-command://` URIs to reliably launch the target view, plus quick actions let you copy the command text or URI for reuse.
+
 ## Configuration
 
 ### Version Aliases (Open Verse command)
