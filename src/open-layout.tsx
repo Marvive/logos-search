@@ -72,8 +72,9 @@ export default function Command() {
     ? state.error
     : "No layouts found. Save one in Logos or point Raycast at layouts.db.";
 
-  const renderRevealAction = state.dbPath
-    ? () => <Action.Open title="Reveal Layouts DB" icon={Icon.Eye} target={state.dbPath} application="Finder" />
+  const currentDbPath = state.dbPath;
+  const renderRevealAction = currentDbPath
+    ? () => <Action.Open title="Reveal Layouts DB" icon={Icon.Eye} target={currentDbPath} application="Finder" />
     : undefined;
 
   return (

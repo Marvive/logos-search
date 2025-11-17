@@ -67,8 +67,9 @@ export default function Command() {
     ? state.error
     : "No reading plans found. Create one in Logos or point Raycast at ReadingPlan.db.";
 
-  const renderRevealAction = state.dbPath
-    ? () => <Action.Open title="Reveal ReadingPlan DB" icon={Icon.Eye} target={state.dbPath} application="Finder" />
+  const currentDbPath = state.dbPath;
+  const renderRevealAction = currentDbPath
+    ? () => <Action.Open title="Reveal ReadingPlan DB" icon={Icon.Eye} target={currentDbPath} application="Finder" />
     : undefined;
 
   return (

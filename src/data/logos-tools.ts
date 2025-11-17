@@ -502,7 +502,7 @@ export const LOGOS_TOOL_GROUPS: LogosToolGroup[] = [
         id: "ot-commandments",
         name: "Commandments of the Law",
         description: "Explore every Old Testament commandment by topic and reference.",
-        icon: Icon.Checklist,
+        icon: Icon.CheckList,
         keywords: ["commandments", "law", "torah"],
         interactiveIds: ["OTCommandments"],
         interactiveSlugs: ["ot-commandments", "commandments-of-the-law"],
