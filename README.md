@@ -36,6 +36,13 @@ Raycast extension with commands that open verses, run searches, and browse resou
 - Returns the official topic label, category icon, and raw Factbook URI so you always know the exact identifier Logos expects.
 - Opens the highlighted topic in Factbook or copies the `logos4:Factbook;ref=…` URI for reuse.
 
+### Exegetical Guide
+
+- Acts as a quick launcher: type a Bible passage (for example `Matthew 5` or `James 2:1-13`) and hit <kbd>Return</kbd>.
+- Built-in book parsing converts Bible references into `ref=BibleESV.Mt5…` (or whichever prefix you configure), so you always land on the correct passage instead of the last guide state.
+- Reference prefix defaults to `BibleESV`; switch it to `BibleNASB95`, `BibleLSB`, etc. in the command preferences if you want another translation.
+- Opens your chosen guide title (default `My Exegetical Guide`) through `ref.ly/logos4/Guide?t=…&ref=…`, with additional `logos4:` fallbacks plus quick actions to copy either URI.
+
 ### Reading Plans
 
 - Lists the reading plans stored in each account's `Documents/ReadingPlan/ReadingPlan.db` so you can reach today's assignment with a single press of <kbd>Return</kbd>.

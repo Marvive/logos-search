@@ -149,6 +149,32 @@
       ]
     },
     {
+      "name": "exegetical-guide",
+      "title": "Exegetical Guide",
+      "subtitle": "Open Exegetical Guide",
+      "description": "Type a Bible passage and open your Exegetical Guide in Logos.",
+      "mode": "view",
+      "preferences": [
+        {
+          "name": "guideTitle",
+          "type": "textfield",
+          "title": "Guide Title",
+          "placeholder": "My Exegetical Guide",
+          "description": "Matches the guide title inside Logos.",
+          "required": false
+        },
+        {
+          "name": "referencePrefix",
+          "type": "textfield",
+          "title": "Reference Prefix",
+          "placeholder": "BibleESV",
+          "description": "Prefix used when building Logos Bible references (defaults to BibleESV).",
+          "defaultValue": "BibleESV",
+          "required": false
+        }
+      ]
+    },
+    {
       "name": "search-factbook",
       "title": "Search Factbook",
       "subtitle": "Open a topic in Logos Factbook",
