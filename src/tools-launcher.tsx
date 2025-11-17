@@ -66,14 +66,12 @@ async function launchTool(tool: LogosTool, uris?: string[]) {
   let lastError: unknown;
   for (const uri of candidates) {
     try {
-      console.info("[Tools] Attempting to open Logos tool", { tool: tool.id, uri });
       const isHttp = uri.startsWith("http://") || uri.startsWith("https://");
       await open(uri, isHttp ? undefined : LOGOS_BUNDLE_ID);
       await showHUD(`Opening ${tool.name}`);
       return;
     } catch (error) {
       lastError = error;
-      console.error("[Tools] Failed to open URI", { tool: tool.id, uri, error });
     }
   }
 
