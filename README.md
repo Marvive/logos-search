@@ -3,6 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Raycast Extension](https://img.shields.io/badge/Raycast-Extension-red)](https://www.raycast.com/)
 
+
 Raycast extension with commands that open verses, run searches, and browse resources in Logos Bible Software.
 
 ## Table of Contents
