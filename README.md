@@ -185,7 +185,7 @@ npm run lint
 If you find Logos Launcher useful, consider supporting its development:
 
 - ⭐ Star this repository
-- 💖 [Sponsor on GitHub](https://github.com/sponsors/michael_marvive)
+- 💖 [Sponsor on GitHub](https://github.com/sponsors/Marvive)
 
 Your support helps maintain and improve this extension!
 
