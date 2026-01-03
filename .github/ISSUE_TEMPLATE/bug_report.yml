@@ -1,0 +1,114 @@
+name: Bug Report
+description: Report a bug in Logos Launcher
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill out the form below to help us understand and fix the issue.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: Describe what went wrong...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior.
+      placeholder: |
+        1. Open Raycast
+        2. Run '...' command
+        3. Type '...'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: A clear description of what you expected to happen.
+      placeholder: What should have happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Actual Behavior
+      description: What actually happened instead.
+      placeholder: What actually happened?
+    validations:
+      required: true
+
+  - type: input
+    id: raycast-version
+    attributes:
+      label: Raycast Version
+      description: "Find this in Raycast → About Raycast"
+      placeholder: "e.g., 1.72.0"
+    validations:
+      required: true
+
+  - type: input
+    id: macos-version
+    attributes:
+      label: macOS Version
+      description: "Find this in  → About This Mac"
+      placeholder: "e.g., 14.4 (Sonoma)"
+    validations:
+      required: true
+
+  - type: input
+    id: logos-version
+    attributes:
+      label: Logos Version
+      description: "Find this in Logos → About Logos (optional but helpful)"
+      placeholder: "e.g., 10.18.0"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: command
+    attributes:
+      label: Affected Command
+      description: Which command(s) are affected?
+      multiple: true
+      options:
+        - Open Verse in Logos
+        - Search Library
+        - Logos All Search
+        - Bible Word Study
+        - Exegetical Guide
+        - Search Factbook
+        - Reading Plans
+        - Open Logos Layout
+        - Logos Tools Launcher
+        - Other / Multiple
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots / Logs
+      description: If applicable, add screenshots or error logs to help explain your problem.
+      placeholder: Paste screenshots or error messages here...
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other context about the problem (e.g., specific database paths, library size, etc.)
+      placeholder: Any additional information that might help...
+    validations:
+      required: false
