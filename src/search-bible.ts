@@ -26,7 +26,20 @@ export default async function Command(props: LaunchProps<{ arguments: Arguments.
   }
 
   // Determine search mode
-  const isPrecise = preferences.defaultPreciseSearch ?? false;
+  // Runtime argument takes priority over preference
+  const smartSearchArg = props.arguments.smartSearch;
+  let isPrecise: boolean;
+
+  if (smartSearchArg === "smart") {
+    // Explicitly smart - never precise
+    isPrecise = false;
+  } else if (smartSearchArg === "precise") {
+    // Explicitly precise
+    isPrecise = true;
+  } else {
+    // Default: use preference
+    isPrecise = preferences.defaultPreciseSearch ?? false;
+  }
 
   // Build the search query
   // For precise search, wrap in quotes for exact matching

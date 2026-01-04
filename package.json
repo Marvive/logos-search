@@ -147,6 +147,25 @@
           "name": "query",
           "type": "text",
           "placeholder": "grace AND mercy"
+        },
+        {
+          "name": "smartSearch",
+          "type": "dropdown",
+          "data": [
+            {
+              "value": "default",
+              "title": "Use Default"
+            },
+            {
+              "value": "smart",
+              "title": "Smart Search"
+            },
+            {
+              "value": "precise",
+              "title": "Precise Search"
+            }
+          ],
+          "placeholder": "Search Type"
         }
       ],
       "preferences": [
