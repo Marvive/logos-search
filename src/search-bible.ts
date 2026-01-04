@@ -48,10 +48,12 @@ export default async function Command(props: LaunchProps<{ arguments: Arguments.
 
   // Build the URL with appropriate parameters
   // syntax=v2 enables Logos' smart morphological matching
+  // searchMode explicitly controls whether Logos uses Smart or Precise mode
   const params = new URLSearchParams({
     kind: KIND,
     q: searchQuery,
     syntax: "v2",
+    searchMode: isPrecise ? "precise" : "smart",
   });
 
   const url = `${SEARCH_URL}?${params.toString()}`;
