@@ -25,21 +25,8 @@ export default async function Command(props: LaunchProps<{ arguments: Arguments.
     return;
   }
 
-  // Determine search mode
-  // Runtime argument takes priority over preference
-  const smartSearchArg = props.arguments.smartSearch;
-  let isPrecise: boolean;
-
-  if (smartSearchArg === "smart") {
-    // Explicitly smart - never precise
-    isPrecise = false;
-  } else if (smartSearchArg === "precise") {
-    // Explicitly precise
-    isPrecise = true;
-  } else {
-    // Default: use preference
-    isPrecise = preferences.defaultPreciseSearch ?? false;
-  }
+  // Determine search mode from preference
+  const isPrecise = preferences.defaultPreciseSearch ?? false;
 
   // Build the search query
   // For precise search, wrap in quotes for exact matching
@@ -48,12 +35,12 @@ export default async function Command(props: LaunchProps<{ arguments: Arguments.
 
   // Build the URL with appropriate parameters
   // syntax=v2 enables Logos' smart morphological matching
-  // searchMode explicitly controls whether Logos uses Smart or Precise mode
+  // smart explicitly controls whether Logos uses Smart or Precise mode
   const params = new URLSearchParams({
     kind: KIND,
     q: searchQuery,
     syntax: "v2",
-    searchMode: isPrecise ? "precise" : "smart",
+    smart: isPrecise ? "false" : "true",
   });
 
   const url = `${SEARCH_URL}?${params.toString()}`;
